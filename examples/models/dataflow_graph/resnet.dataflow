@@ -1,0 +1,49 @@
+dataflow graph operator and shape
+
+✅ 1. ResNet High-Level Pipeline (common to all variants)
+Input 224×224
+→ Conv1 (7×7)
+→ MaxPool
+→ Stage 1 (Res2_x)
+→ Stage 2 (Res3_x)
+→ Stage 3 (Res4_x)
+→ Stage 4 (Res5_x)
+→ GlobalAvgPool
+→ FC (1000)
+
+✅ 2. ResNet-18 / ResNet-34 (BasicBlock)
+
+BasicBlock structure:
+
+Input → Conv3×3 → BN → ReLU → Conv3×3 → BN
+       + Skip Connection
+       → ReLU
+
+⭐ ResNet-18 Exact Shapes
+
+Input: (3,224,224)
+
+Conv1
+7×7, stride=2 → (64,112,112)
+MaxPool 3×3 s=2 → (64,56,56)
+
+Stage 1: Res2_x (2 blocks)
+
+Output shape: (64,56,56)
+
+Stage 2: Res3_x (2 blocks)
+
+First block stride=2
+Output shape: (128,28,28)
+
+Stage 3: Res4_x (2 blocks)
+
+Output: (256,14,14)
+
+Stage 4: Res5_x (2 blocks)
+
+Output: (512,7,7)
+
+GAP → FC → 1000
+
+Final: (1000)

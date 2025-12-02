@@ -1,0 +1,80 @@
+dataflow graph operator
+
+Input → Block1 → Block2 → Block3 → Block4 → Block5 → Flatten
+      → FC1 → ReLU → Dropout
+      → FC2 → ReLU → Dropout
+      → FC3 → Softmax
+
+
+Each BlockN is:
+Conv → ReLU → Conv → ReLU → (optional extra Conv/ReLU) → MaxPool
+
+
+dataflow graph shape 
+
+Block 1
+Input: (3,224,224)
+
+Conv1_1 64@3×3 → (64,224,224)
+ReLU
+Conv1_2 64@3×3 → (64,224,224)
+ReLU
+MaxPool 2×2 s=2 → (64,112,112)
+
+Block 2
+Conv2_1 128@3×3 → (128,112,112)
+ReLU
+Conv2_2 128@3×3 → (128,112,112)
+ReLU
+MaxPool → (128,56,56)
+
+Block 3
+Conv3_1 256 → (256,56,56)
+Conv3_2 256 → (256,56,56)
+Conv3_3 256 → (256,56,56)
+MaxPool → (256,28,28)
+
+Block 4
+Conv4_1 512 → (512,28,28)
+Conv4_2 512 → (512,28,28)
+Conv4_3 512 → (512,28,28)
+MaxPool → (512,14,14)
+
+Block 5
+Conv5_1 512 → (512,14,14)
+Conv5_2 512 → (512,14,14)
+Conv5_3 512 → (512,14,14)
+MaxPool → (512,7,7)
+
+Flatten + FC layers
+
+Flatten:
+
+(512,7,7) → 512*7*7 = 25088
+
+
+Fully-connected:
+
+FC1: 25088 → 4096
+ReLU
+Dropout
+
+FC2: 4096 → 4096
+ReLU
+Dropout
+
+FC3: 4096 → 1000
+Softmax
+
+⭐ Final Shape Summary Table
+Stage	Output Shape
+Input	(3,224,224)
+Block1	(64,112,112)
+Block2	(128,56,56)
+Block3	(256,28,28)
+Block4	(512,14,14)
+Block5	(512,7,7)
+Flatten	25088
+FC1	4096
+FC2	4096
+FC3	1000

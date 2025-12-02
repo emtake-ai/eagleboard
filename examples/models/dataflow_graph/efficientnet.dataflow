@@ -1,0 +1,163 @@
+✅ 1. EfficientNet-B0 High-Level Architecture
+Stem (Conv 3×3)
+→ MBConv1 (k3, expand=1) × 1
+→ MBConv6 (k3) × 2
+→ MBConv6 (k5) × 2
+→ MBConv6 (k3) × 3
+→ MBConv6 (k5) × 3
+→ MBConv6 (k5) × 4
+→ MBConv6 (k3) × 1
+→ Head (Conv 1×1)
+→ GlobalAvgPool
+→ FC
+
+
+Each MBConv block is:
+
+Input
+→ (1×1 expansion conv)
+→ Depthwise conv (k=3 or 5)
+→ SE block
+→ (1×1 projection conv)
+→ Skip connection if shape matches
+
+✅ 2. EfficientNet-B0 Detailed Shapes (Input 3×224×224)
+⭐ Stem
+Conv 3×3 stride 2 → (32,112,112)
+BN → Swish
+
+⭐ Stage 1 — MBConv1 ×1
+
+(kernel 3×3, expand=1 → bottleneck)
+
+Input:  (32,112,112)
+DWConv 3×3 s=1 → (32,112,112)
+SE (squeeze to 32/4=8 → excite back to 32)
+PWConv (projection) → (16,112,112)
+Skip NO (channels changed)
+
+
+Output: (16,112,112)
+
+⭐ Stage 2 — MBConv6 (k3) ×2
+Block 1 (stride=2)
+(16,112,112)
+Expand 1×1: 16→96 → (96,112,112)
+DWConv 3×3 s=2 → (96,56,56)
+SE (96→4→96)
+Projection 96→24 → (24,56,56)
+Skip NO (stride mismatch)
+
+Block 2 (stride=1)
+(24,56,56) → (24,56,56)
+Skip YES
+
+
+Output: (24,56,56)
+
+⭐ Stage 3 — MBConv6 (k5) ×2
+Block 1 (stride=2)
+(24,56,56)
+Expand: 24→144
+DWConv 5×5 s=2 → (144,28,28)
+SE
+Projection 144→40 → (40,28,28)
+Skip NO
+
+Block 2 (stride=1)
+(40,28,28) → (40,28,28)
+Skip YES
+
+
+Output: (40,28,28)
+
+⭐ Stage 4 — MBConv6 (k3) ×3
+
+Block 1 (stride=2)
+
+(40,28,28)
+Expand 40→240
+DW 3×3 s=2 → (240,14,14)
+SE
+Proj 240→80 → (80,14,14)
+Skip NO
+
+
+Blocks 2–3 (stride=1):
+
+(80,14,14)
+Skip YES
+
+
+Output: (80,14,14)
+
+⭐ Stage 5 — MBConv6 (k5) ×3
+
+Block 1 (stride=1)
+
+80→480 expand
+DW 5×5 s=1 → (480,14,14)
+SE
+Proj →112 → (112,14,14)
+Skip YES
+
+
+Blocks 2–3 same output: (112,14,14)
+
+⭐ Stage 6 — MBConv6 (k5) ×4
+
+Block 1 (stride=2)
+
+112→672 expand
+DW 5×5 s=2 → (672,7,7)
+SE
+Proj →192 → (192,7,7)
+Skip NO
+
+
+Blocks 2–4 (stride=1)
+
+(192,7,7) → (192,7,7)
+Skip YES
+
+
+Output: (192,7,7)
+
+⭐ Stage 7 — MBConv6 (k3) ×1
+
+(stride=1)
+
+192→1152 expand
+DW 3×3 → (1152,7,7)
+SE
+Proj →320 → (320,7,7)
+Skip YES
+
+
+Output: (320,7,7)
+
+⭐ Head & Classifier
+Conv 1×1:
+320 → 1280 → (1280,7,7)
+BN → Swish
+
+Global Avg Pool:
+(1280,7,7) → (1280)
+
+FC:
+1280 → 1000
+Softmax
+
+⭐ Final EfficientNet-B0 Shapes Summary
+Stage	Output Shape
+Stem	(32,112,112)
+MBConv1	(16,112,112)
+MBConv3×3 ×2	(24,56,56)
+MBConv5×5 ×2	(40,28,28)
+MBConv3×3 ×3	(80,14,14)
+MBConv5×5 ×3	(112,14,14)
+MBConv5×5 ×4	(192,7,7)
+MBConv3×3 ×1	(320,7,7)
+Head	(1280,7,7)
+GAP	(1280)
+FC	(1000)

@@ -1,0 +1,77 @@
+dataflow graph operator
+
+Input → Conv1 → ReLU → LRN → MaxPool
+      → Conv2 → ReLU → LRN → MaxPool
+      → Conv3 → ReLU
+      → Conv4 → ReLU
+      → Conv5 → ReLU → MaxPool
+      → Flatten
+      → FC1 → ReLU → Dropout
+      → FC2 → ReLU → Dropout
+      → FC3 → Softmax
+
+dataflow graph shape 
+
+Input
+(3, 227, 227)      # original 2012 AlexNet input size
+
+Conv1
+Conv1: 96 filters, 11×11, stride=4, pad=0
+(3,227,227) → (96,55,55)
+ReLU → (96,55,55)
+LRN → (96,55,55)
+MaxPool 3×3 stride=2 → (96,27,27)
+
+Conv2
+Conv2: 256 filters, 5×5, stride=1, pad=2
+(96,27,27) → (256,27,27)
+ReLU → (256,27,27)
+LRN → (256,27,27)
+MaxPool 3×3 stride=2 → (256,13,13)
+
+Conv3
+Conv3: 384 filters, 3×3, stride=1, pad=1
+(256,13,13) → (384,13,13)
+ReLU → (384,13,13)
+
+Conv4
+Conv4: 384 filters, 3×3, stride=1, pad=1
+(384,13,13) → (384,13,13)
+ReLU → (384,13,13)
+
+Conv5
+Conv5: 256 filters, 3×3, stride=1, pad=1
+(384,13,13) → (256,13,13)
+ReLU → (256,13,13)
+MaxPool 3×3 stride=2 → (256,6,6)
+
+Flatten
+(256,6,6) → 256*6*6 = 9216
+
+FC Layers
+FC1: 9216 → 4096
+ReLU → Dropout
+
+FC2: 4096 → 4096
+ReLU → Dropout
+
+FC3: 4096 → 1000
+Softmax
+
+⭐ Final Tensor Shape Table
+Stage	Shape
+Input	(3, 227, 227)
+Conv1 → ReLU	(96, 55, 55)
+LRN	(96, 55, 55)
+Pool1	(96, 27, 27)
+Conv2 → ReLU	(256, 27, 27)
+LRN2	(256, 27, 27)
+Pool2	(256, 13, 13)
+Conv3	(384, 13, 13)
+Conv4	(384, 13, 13)
+Conv5	(256, 13, 13)
+Pool5	(256, 6, 6)
+Flatten	9216
+FC1	4096
+FC2	4096
+FC3	1000

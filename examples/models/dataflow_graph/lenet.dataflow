@@ -1,0 +1,17 @@
+1. dataflow graph operator
+Input → Conv1 → Tanh → AvgPool1 → Conv2 → Tanh → AvgPool2 → Flatten → FC1 → Tanh → FC2 → Tanh → FC3 → Softmax
+
+2. dataflow with shape
+(1, 32, 32) ──Conv1(kernel=5,stride=1,6ch)──► (6, 28, 28)
+      └─► Tanh ─► (6, 28, 28)
+      └─► AvgPool(kernel=2,stride=2) ─► (6, 14, 14)
+
+(6, 14, 14) ──Conv2(kernel=5,stride=1,16ch)──► (16, 10, 10)
+       └─► Tanh ─► (16, 10, 10)
+       └─► AvgPool(kernel=2,stride=2) ─► (16, 5, 5)
+
+(16*5*5 = 400) ──Flatten──► (400)
+
+(400) ──FC1(120)──► Tanh  
+(120) ──FC2(84) ─► Tanh  
+(84) ──FC3(10) ─► Softmax

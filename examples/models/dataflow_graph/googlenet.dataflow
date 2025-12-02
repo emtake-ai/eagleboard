@@ -1,0 +1,112 @@
+dataflow graph operator
+
+Input
+→ Conv1 → Pool1
+→ Conv2 → Conv2_reduce → Pool2
+→ Inception 3a → Inception 3b → Pool3
+→ Inception 4a → 4b → 4c → 4d → 4e → Pool4
+→ Inception 5a → Inception 5b
+→ GlobalAvgPool → Dropout → FC → Softmax
+
+
+dataflow graph shape 
+
+nput size: 3 × 224 × 224
+
+⭐ Stage 1: Conv + Pool
+Conv1: 7×7, stride 2, 64ch
+(3,224,224) → (64,112,112)
+ReLU
+MaxPool 3×3 s=2 → (64,56,56)
+
+⭐ Stage 2: Conv + Pool
+**
+
+Conv2_reduce: 1×1 64 → (64,56,56)
+Conv2: 3×3 192 → (192,56,56)
+MaxPool → (192,28,28)
+**
+
+⭐ Stage 3: Inception (3a) and (3b)
+Inception 3a
+
+Input: (192, 28, 28)
+Branches:
+
+Branch	Operator	Output Shape
+1	1×1 conv, 64	(64,28,28)
+2	1×1 96 → 3×3 128	(128,28,28)
+3	1×1 16 → 5×5 32	(32,28,28)
+4	Pool → 1×1 32	(32,28,28)
+
+Concatenate:
+
+64 + 128 + 32 + 32 = 256 channels
+→ (256, 28,28)
+
+Inception 3b
+
+Input: (256, 28, 28)
+
+Outputs channels:
+
+128 + 192 + 96 + 64 = 480
+→ (480, 28,28)
+
+MaxPool → (480, 14,14)
+⭐ Stage 4: Inception 4a–4e
+
+Input: (480, 14, 14)
+
+Inception 4a output channels:
+192 + 208 + 48 + 64 = 512
+→ (512,14,14)
+
+Inception 4b output:
+160 + 224 + 64 + 64 = 512
+→ (512,14,14)
+
+Inception 4c output:
+128 + 256 + 64 + 64 = 512
+→ (512,14,14)
+
+Inception 4d output:
+112 + 288 + 64 + 64 = 528
+→ (528,14,14)
+
+Inception 4e output:
+256 + 320 + 128 + 128 = 832
+→ (832,14,14)
+
+MaxPool → (832, 7,7)
+⭐ Stage 5: Inception 5a, 5b
+Inception 5a output:
+256 + 320 + 128 + 128 = 832
+→ (832,7,7)
+
+Inception 5b output:
+384 + 384 + 128 + 128 = 1024
+→ (1024,7,7)
+
+⭐ Final classifier
+Global Average Pool (7×7 → 1×1):
+(1024,7,7) → (1024,1,1)
+
+Dropout → FC (1000) → Softmax
+⭐ Final Shape Summary Table
+Stage	Output Shape
+Conv1 + Pool	(64,56,56)
+Conv2 + Pool	(192,28,28)
+Inc 3a	(256,28,28)
+Inc 3b	(480,28,28)
+Pool	(480,14,14)
+Inc 4a	(512,14,14)
+Inc 4b	(512,14,14)
+Inc 4c	(512,14,14)
+Inc 4d	(528,14,14)
+Inc 4e	(832,14,14)
+Pool	(832,7,7)
+Inc 5a	(832,7,7)
+Inc 5b	(1024,7,7)
+GAP	(1024)
+FC	(1000)
