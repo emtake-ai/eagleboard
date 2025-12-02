@@ -15,13 +15,19 @@ github에서는 모델에 대한 dataflow graph와 모델에 대한 정보를 �
 
 아래의 링크를 제공해 드립니다.
 
-Huggingface.com/emtake-ai/lenet
-Huggingface.com/emtake-ai/alexnet
-Huggingface.com/emtake-ai/vggnet
-Huggingface.com/emtake-ai/googlenet
-Huggingface.com/emtake-ai/resnet
-Huggingface.com/emtake-ai/mobilenet
-Huggingface.com/emtake-ai/efficientnet
+1. Huggingface.com/emtake-ai/lenet
+
+2. Huggingface.com/emtake-ai/alexnet
+
+3. Huggingface.com/emtake-ai/vggnet
+
+4. Huggingface.com/emtake-ai/googlenet
+
+5. Huggingface.com/emtake-ai/resnet
+
+6. Huggingface.com/emtake-ai/mobilenet
+
+7. Huggingface.com/emtake-ai/efficientnet
 
 위의 사이트에서 pt/ pth 뿐만 아니라 이에 연관된 dataset도 다운로드 가능합니다.
 
