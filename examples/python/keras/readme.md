@@ -12,6 +12,7 @@
 아래는 Keras 단독으로 구현한 전체 코드 예시입니다.
 
 1. Dataset Loader (데이터셋 로더)
+
 Keras는 image_dataset_from_directory() API를 통해 매우 간단하게 데이터셋을 불러올 수 있습니다.
 이미지 디렉토리는 다음과 같은 구조를 가정합니다:
 dataset/
@@ -26,6 +27,7 @@ dataset/
 
 
 🔥 Keras 데이터셋 로더 코드
+
 import tensorflow as tf
 
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(
@@ -36,6 +38,7 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
 
 
 2. Data Preprocessing (데이터 전처리)
+
 Keras에서는 map() 을 이용해 전처리 파이프라인을 추가할 수 있습니다.
 
 
@@ -50,10 +53,12 @@ train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
 
 
 3. Deep Learning Modeling (모델 구성)
+
 아래는 간단한 CNN 기반 분류 모델(Keras Sequential 사용) 예시입니다.
 
 
 🔥 Keras 모델 구성 코드
+
 from tensorflow.keras import layers, models
 
 model = models.Sequential([
@@ -70,6 +75,7 @@ model = models.Sequential([
 
 
 4. Compiler Setting (컴파일러 설정)
+
 Keras의 compile() API를 사용하여 Optimizer, Loss, Metrics 등을 설정합니다.
 
 
@@ -82,15 +88,18 @@ model.compile(
 
 
 5. Training Setting (학습 설정)
+
 학습 반복 횟수(Epoch)를 설정합니다.
 epochs = 5
 
 
 6. Start Training (학습 시작)
+
 아래는 학습을 진행하는 전체 코드입니다.
 
 
 🚀 Keras 전체 학습 코드 (FULL VERSION)
+
 import tensorflow as tf
 from tensorflow.keras import layers, models
 
