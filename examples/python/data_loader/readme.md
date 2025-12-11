@@ -6,10 +6,15 @@ PyTorch와 TensorFlow(Keras)에서는 서로 다른 API를 사용합니다.
 PyTorch는 torchvision.datasets.ImageFolder와 DataLoader를 사용하며,
 디렉토리는 다음과 같은 구조를 가정합니다:
 dataset/
+ 
  └── train/
+      
       ├── class1/
+      
       ├── class2/
+      
       └── ...
+
 ✔️ PyTorch 코드 예시
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
@@ -33,10 +38,15 @@ train_loader = DataLoader(
 TensorFlow는 image_dataset_from_directory() API를 사용하며,
 디렉토리 구조는 PyTorch와 동일합니다:
 dataset/
+ 
  └── train/
+ 
       ├── class1/
+ 
       ├── class2/
+ 
       └── ...
+
 ✔️ TensorFlow(Keras) 코드 예시
 import tensorflow as tf
 
