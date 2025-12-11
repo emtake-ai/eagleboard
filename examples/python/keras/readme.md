@@ -33,6 +33,8 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     image_size=(224, 224),
     batch_size=32
 )
+
+
 2. Data Preprocessing (데이터 전처리)
 Keras에서는 map() 을 이용해 전처리 파이프라인을 추가할 수 있습니다.
 
@@ -45,6 +47,8 @@ def preprocess(image, label):
 
 train_ds = train_ds.map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
 train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
+
+
 3. Deep Learning Modeling (모델 구성)
 아래는 간단한 CNN 기반 분류 모델(Keras Sequential 사용) 예시입니다.
 
@@ -63,6 +67,8 @@ model = models.Sequential([
     layers.Dense(64, activation='relu'),
     layers.Dense(10, activation='softmax')
 ])
+
+
 4. Compiler Setting (컴파일러 설정)
 Keras의 compile() API를 사용하여 Optimizer, Loss, Metrics 등을 설정합니다.
 
@@ -73,9 +79,13 @@ model.compile(
     loss="sparse_categorical_crossentropy",
     metrics=["accuracy"]
 )
+
+
 5. Training Setting (학습 설정)
 학습 반복 횟수(Epoch)를 설정합니다.
 epochs = 5
+
+
 6. Start Training (학습 시작)
 아래는 학습을 진행하는 전체 코드입니다.
 
