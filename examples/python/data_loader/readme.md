@@ -59,10 +59,3 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
 
 # 성능 최적화
 train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
-
-📌 핵심 차이 요약
-기능	PyTorch	TensorFlow(Keras)
-기본 Dataset API	ImageFolder	image_dataset_from_directory
-반환 형태	Python Iterable (DataLoader)	tf.data.Dataset
-전처리	transforms.Compose	map(preprocess_fn)
-성능 설정	num_workers, pin_memory	AUTOTUNE, prefetch
