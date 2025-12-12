@@ -1,7 +1,12 @@
-📌 딥러닝 학습 전체 워크플로우 (Keras 단독 버전)
+Deep Learning Training Workflow (Keras-Only Version)
 
-이 문서는 TensorFlow Keras 기반으로 딥러닝 모델을 학습할 때 필요한 전체 절차를 정리한 문서입니다.
-전체 과정은 다음 순서대로 진행됩니다.
+This document describes the complete workflow for training a deep learning model using TensorFlow Keras only.
+The workflow covers the entire process from dataset loading to model training and saving the trained model.
+
+Training Workflow
+
+The training process follows the steps below.
+
 1. Dataset Loader
 2. Data Preprocessing
 3. Deep Learning Modeling
@@ -9,152 +14,100 @@
 5. Training Setting
 6. Start Training
 
-아래는 Keras 단독으로 구현한 전체 코드 예시입니다.
 
-1. Dataset Loader (데이터셋 로더)
+1. Dataset Loader
 
-Keras는 image_dataset_from_directory() API를 통해 매우 간단하게 데이터셋을 불러올 수 있습니다.
-이미지 디렉토리는 다음과 같은 구조를 가정합니다:
-dataset/
- 
- └── train/
- 
-      ├── class1/
- 
-      ├── class2/
- 
-      └── ...
+Keras provides a convenient API called image_dataset_from_directory to load image datasets from a directory structure.
 
-
-🔥 Keras 데이터셋 로더 코드
+Example usage:
 
 import tensorflow as tf
-
-train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+    train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     "dataset/train",
     image_size=(224, 224),
     batch_size=32
 )
 
-
-2. Data Preprocessing (데이터 전처리)
-
-Keras에서는 map() 을 이용해 전처리 파이프라인을 추가할 수 있습니다.
+This function automatically infers labels from subdirectory names and returns a tf.data.Dataset object suitable for training.
 
 
-🔥 Keras 전처리 코드
+2. Data Preprocessing
+
+Data preprocessing is applied before feeding data into the model.
+In Keras, preprocessing steps can be added to the dataset pipeline using the map function.
+
+Example preprocessing logic:
+
 def preprocess(image, label):
     image = tf.image.resize(image, (224, 224))
     image = tf.cast(image, tf.float32) / 255.0
     return image, label
+    train_ds = train_ds.map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
+    train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
 
-train_ds = train_ds.map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
-train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
-
-
-3. Deep Learning Modeling (모델 구성)
-
-아래는 간단한 CNN 기반 분류 모델(Keras Sequential 사용) 예시입니다.
+Preprocessing typically includes resizing, normalization, data type conversion, and optional augmentation.
+The same preprocessing logic must be used during inference.
 
 
-🔥 Keras 모델 구성 코드
+3. Deep Learning Modeling
+
+In this step, the model architecture is defined.
+Below is an example of a simple CNN-based classification model implemented using Keras Sequential API.
 
 from tensorflow.keras import layers, models
-
 model = models.Sequential([
-    layers.Conv2D(16, (3, 3), activation='relu', padding='same', input_shape=(224, 224, 3)),
+    layers.Conv2D(16, (3, 3), activation="relu", padding="same", input_shape=(224, 224, 3)),
     layers.MaxPooling2D(4),
-
-    layers.Conv2D(32, (3, 3), activation='relu', padding='same'),
+    layers.Conv2D(32, (3, 3), activation="relu", padding="same"),
     layers.MaxPooling2D(4),
-
     layers.Flatten(),
-    layers.Dense(64, activation='relu'),
-    layers.Dense(10, activation='softmax')
+    layers.Dense(64, activation="relu"),
+    layers.Dense(10, activation="softmax")
 ])
 
-
-4. Compiler Setting (컴파일러 설정)
-
-Keras의 compile() API를 사용하여 Optimizer, Loss, Metrics 등을 설정합니다.
+This model consists of convolution, pooling, and fully connected layers suitable for basic image classification tasks.
 
 
-🔥 Keras 컴파일 코드
+4. Compiler Setting
+Before training starts, training-related parameters must be configured using the compile function.
+
+Example configuration:
+
 model.compile(
     optimizer=tf.keras.optimizers.Adam(1e-3),
     loss="sparse_categorical_crossentropy",
     metrics=["accuracy"]
 )
 
-
-5. Training Setting (학습 설정)
-
-학습 반복 횟수(Epoch)를 설정합니다.
-epochs = 5
+This step defines how the model weights will be updated during training.
 
 
-6. Start Training (학습 시작)
+5. Training Setting
 
-아래는 학습을 진행하는 전체 코드입니다.
+Training parameters such as the number of epochs are defined separately.
+epochs = 5 : 
+Epoch specifies how many times the entire dataset is iterated during training.
 
 
-🚀 Keras 전체 학습 코드 (FULL VERSION)
+6. Start Training
 
-import tensorflow as tf
-from tensorflow.keras import layers, models
+Once all settings are complete, training can be started.
 
------------------------------
-1) Dataset Loader
------------------------------
-train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-    "dataset/train",
-    image_size=(224, 224),
-    batch_size=32
-)
-
------------------------------
-2) Data Preprocessing
------------------------------
-def preprocess(image, label):
-    image = tf.image.resize(image, (224, 224))
-    image = tf.cast(image, tf.float32) / 255.0
-    return image, label
-
-train_ds = train_ds.map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
-train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
-
------------------------------
-3) Deep Learning Model
------------------------------
-model = models.Sequential([
-    layers.Conv2D(16, (3, 3), activation='relu', padding='same', input_shape=(224, 224, 3)),
-    layers.MaxPooling2D(4),
-
-    layers.Conv2D(32, (3, 3), activation='relu', padding='same'),
-    layers.MaxPooling2D(4),
-
-    layers.Flatten(),
-    layers.Dense(64, activation='relu'),
-    layers.Dense(10, activation='softmax')
-])
-
------------------------------
-4) Compiler Setting
------------------------------
-model.compile(
-    optimizer=tf.keras.optimizers.Adam(1e-3),
-    loss="sparse_categorical_crossentropy",
-    metrics=["accuracy"]
-)
-
------------------------------
-5) Training Setting
------------------------------
-epochs = 5
-
------------------------------
-6) Start Training
------------------------------
 print("Training Started...")
 history = model.fit(train_ds, epochs=epochs)
 print("Training Completed!")
+
+After training finishes, the trained model is saved using the Keras native format.
+model.save("model_name.keras")
+
+
+Output
+After training is completed, the trained model is saved as:
+model_name.keras
+The .keras file contains the model architecture, trained weights, and optimizer state.
+This file can be reloaded for further training or converted to ONNX for deployment on other platforms such as NPU-based systems.
+
+
+Summary
+This document describes a Keras-only deep learning training workflow.
+The training output is saved in the native .keras format and can be used in downstream stages such as model conversion and NPU inference.
