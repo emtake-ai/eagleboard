@@ -1,34 +1,23 @@
-딥러닝 모델에 대한 정보를 제공합니다.
+This section provides information about deep learning models.  
 
-딥러닝 계보에 대한 다음과 같은 모델 정보를 드립니다.
+We present the following models that represent the historical evolution of deep learning architectures:  
 
-1. lenet
-2. alexnet
-3. vggnet
-4. googlenet
-5. resnet
-6. mobilenet
-7. efficientnet
+LeNet  
+AlexNet  
+VGGNet  
+GoogLeNet  
+ResNet  
+MobileNet  
+EfficientNet  
 
-github에서는 모델에 대한 dataflow graph와 모델에 대한 정보를 확인할 수 있습니다.
-좀 더 자세한 사항은 huggingface에서 확인을 할 수 있습니다.
+On GitHub, you can review the dataflow graphs and detailed model information in this directory.  
+For more comprehensive resources, please refer to Hugging Face. you can get the model which trained.  
 
-아래의 링크를 제공해 드립니다.
+The links are provided below:
 
-1. Huggingface.com/emtake-ai/lenet
-
-2. Huggingface.com/emtake-ai/alexnet
-
-3. Huggingface.com/emtake-ai/vggnet
-
-4. Huggingface.com/emtake-ai/googlenet
-
-5. Huggingface.com/emtake-ai/resnet
-
-6. Huggingface.com/emtake-ai/mobilenet
-
-7. Huggingface.com/emtake-ai/efficientnet
-
-위의 사이트에서 pt/ pth 뿐만 아니라 이에 연관된 dataset도 다운로드 가능합니다.
-
-감사합니다.
+[huggingface lenet](https://huggingface.co/emtake-ai/lenet)
+[huggingface alexnet](https://huggingface.co/emtake-ai/alexnet)
+[HuggingFace vggnet](https://huggingface.co/emtake-ai/vggnet)
+[HuggingFace googlenet](https://huggingface.co/emtake-ai/googlenet)
+[HuggingFace resnet](https://huggingface.co/emtake-ai/resnet)
+[HuggingFace mobilenet](https://huggingface.co/emtake-ai/mobilenet)
