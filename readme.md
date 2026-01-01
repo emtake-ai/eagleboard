@@ -58,3 +58,14 @@ Keras-based model source code and examples.
 
 #### examples/models/Pytorch/
 PyTorch-based model source code and examples.  
+
+check below link with youtube
+
+- [how to annotate in yolo using labelimg](https://www.youtube.com/watch?v=nV26hK3CxNM)
+- [how to download the git repos using git clone](https://www.youtube.com/watch?v=SGCvhjD3mtM)
+- [how to download the model from huggingface](https://www.youtube.com/watch?v=JCcyCxori0M)
+- [how to build keras, and how to convert it with lne](https://www.youtube.com/watch?v=BDnK0pujDvg)
+- [how to install synabro with docker](https://www.youtube.com/watch?v=fNOcj9eNf_M)
+- [how to install yolov7 from github](https://www.youtube.com/watch?v=vVipUHJVF5o)
+
+
