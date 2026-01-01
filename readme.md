@@ -24,7 +24,7 @@ Synabro를 사용하여 AI 모델(Keras/PyTorch 등)을 NPU 실행 가능한 .ln
 NPU 구조와 동작 방식에 대한 문서를 담는 디렉토리입니다.
 NPU의 내부 구조, 연산 방식, 스케줄링, 메모리 구조 등을 설명합니다.
 
-### docs/software/
+### docs/deployment/
 
 소프트웨어(SDK, runtime, compiler 등)를 어떻게 사용하는지 설명하는 문서를 제공하는 디렉토리입니다.
 API 사용법, 환경 설정, 실행 절차 등이 포함됩니다.

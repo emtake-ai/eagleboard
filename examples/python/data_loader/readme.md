@@ -1,14 +1,14 @@
-Dataset Loader (PyTorch & TensorFlow Comparison)
+# Dataset Loader (PyTorch & TensorFlow Comparison)  
 
-Dataset loading is the first and most fundamental step in a deep learning training pipeline.
-Both PyTorch and TensorFlow (Keras) provide built-in APIs for loading image datasets, but their usage patterns are different.
+Dataset loading is the first and most fundamental step in a deep learning training pipeline.  
+Both PyTorch and TensorFlow (Keras) provide built-in APIs for loading image datasets, but their usage patterns are different.  
 
-This document compares dataset loading approaches in PyTorch and TensorFlow while assuming the same directory structure.
+This document compares dataset loading approaches in PyTorch and TensorFlow while assuming the same directory structure.  
 
-1. Directory Structure Assumption
+## 1. Directory Structure Assumption
 
 Both frameworks assume the following directory structure:
-
+```text
 dataset/train/
             class_1/
                     img1.jpg
@@ -17,17 +17,20 @@ dataset/train/
                     img1.jpg
                     img2.jpg
 
-Class labels are inferred automatically from subdirectory names.
+```
+
+Class labels are inferred automatically from subdirectory names.  
 
 
-2. PyTorch Dataset Loader
+## 2. PyTorch Dataset Loader
 
-PyTorch typically uses torchvision.datasets.ImageFolder together with DataLoader.
-ImageFolder reads images from a directory structure where each subdirectory represents a class.
-DataLoader handles batching, shuffling, and multi-threaded loading.
+PyTorch typically uses torchvision.datasets.ImageFolder together with DataLoader.  
+ImageFolder reads images from a directory structure where each subdirectory represents a class.  
+DataLoader handles batching, shuffling, and multi-threaded loading.  
 
-Example usage:
+Example usage:  
 
+```text
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
     transform = transforms.Compose([
@@ -47,14 +50,16 @@ train_loader = DataLoader(
     num_workers=4,
     pin_memory=True
 )
+```
 
-3. TensorFlow (Keras) Dataset Loader
+## 3. TensorFlow (Keras) Dataset Loader
 
-TensorFlow (Keras) provides the image_dataset_from_directory API, which simplifies dataset loading into a single function call.
-This API assumes the same directory structure as PyTorch ImageFolder.
+TensorFlow (Keras) provides the image_dataset_from_directory API, which simplifies dataset loading into a single function call.  
+This API assumes the same directory structure as PyTorch ImageFolder.  
 
-Example usage:
+Example usage:  
 
+```text
 import tensorflow as tf
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     "dataset/train",
@@ -62,4 +67,4 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     batch_size=32,
     shuffle=True
 )
-
+```
