@@ -68,4 +68,8 @@ check below link with youtube
 - [how to install synabro with docker](https://www.youtube.com/watch?v=fNOcj9eNf_M)
 - [how to install yolov7 from github](https://www.youtube.com/watch?v=vVipUHJVF5o)
 
+check on how to use V4L2 and ALSA devices
 
+- [how to use ALSA device using Gstreamer](../emtake-ai/install_1.md)
+
+- [how to use V4L2 device using Gstreamer](../emtake-ai/install_2.md)
